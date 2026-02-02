@@ -1,0 +1,134 @@
+/* ===== RESET ===== */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+}
+
+/* ===== HEADER ===== */
+.header {
+    background-color: #1f2937;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    font-size: 18px;
+    font-weight: bold;
+    margin-right: 20px;
+}
+
+.menu a {
+    color: white;
+    text-decoration: none;
+    margin-right: 15px;
+}
+
+.menu a:hover {
+    text-decoration: underline;
+}
+
+.search {
+    margin-left: auto;
+}
+
+.search input {
+    padding: 5px;
+}
+
+.search button {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+/* ===== CONTAINER ===== */
+.container {
+    background-color: white;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+/* ===== TOP BAR ===== */
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-add {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* ===== TABLE ===== */
+.employee-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.employee-table th {
+    background-color: #f3f4f6;
+    text-align: left;
+    padding: 12px 10px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.employee-table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #e5e7eb;
+    vertical-align: middle;
+}
+
+.employee-table tr:hover td {
+    background-color: #f9fafb;
+}
+
+/* ===== COLUMN SIZE ===== */
+.col-id {
+    width: 50px;
+    text-align: center;
+}
+
+.col-name {
+    width: 200px;
+}
+
+.col-email {
+    width: 280px;
+}
+
+.col-phone {
+    width: 140px;
+}
+
+.col-position {
+    width: 120px;
+}
+
+.col-action {
+    width: 150px;
+    text-align: center;
+}
+
+/* ===== BUTTON ===== */
+.btn-edit {
+    background-color: #facc15;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.btn-delete {
+    background-color: #ef4444;
+    col
