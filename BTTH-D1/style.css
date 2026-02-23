@@ -1,11 +1,10 @@
-/* ===== RESET ===== */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: #f5f5f5;
 }
 
-/* ===== HEADER ===== */
+
 .header {
     background-color: #1f2937;
     color: white;
@@ -43,7 +42,7 @@ body {
     cursor: pointer;
 }
 
-/* ===== CONTAINER ===== */
+
 .container {
     background-color: white;
     margin: 20px;
@@ -51,7 +50,7 @@ body {
     border-radius: 5px;
 }
 
-/* ===== TOP BAR ===== */
+
 .top {
     display: flex;
     justify-content: space-between;
@@ -67,7 +66,7 @@ body {
     cursor: pointer;
 }
 
-/* ===== TABLE ===== */
+
 .employee-table {
     width: 100%;
     border-collapse: collapse;
@@ -92,7 +91,7 @@ body {
     background-color: #f9fafb;
 }
 
-/* ===== COLUMN SIZE ===== */
+
 .col-id {
     width: 50px;
     text-align: center;
@@ -119,7 +118,7 @@ body {
     text-align: center;
 }
 
-/* ===== BUTTON ===== */
+
 .btn-edit {
     background-color: #facc15;
     border: none;
