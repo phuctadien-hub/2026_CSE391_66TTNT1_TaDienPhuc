@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Avengers vs Thanos</title>
+    <link rel="stylesheet" href="cssgame.css">
+</head>
+
+<body>
+
+    <div id="menu">
+        <h1>AVENGERS VS THANOS</h1>
+
+        <p>Select your hero</p>
+
+        <div class="characters">
+            <button onclick="startGame('ironman')">Iron Man</button>
+            <button onclick="startGame('captain')">Captain America</button>
+            <button onclick="startGame('thor')">Thor</button>
+        </div>
+
+    </div>
+
+
+    <div id="game">
+
+        <div id="map">
+
+            <div id="player"></div>
+            <div id="thanos"></div>
+
+            <div class="weapon" style="left:400px"></div>
+            <div class="weapon" style="left:650px"></div>
+            <div class="weapon" style="left:900px"></div>
+
+        </div>
+
+        <div id="ui">
+
+            <div id="storage">
+                <div class="slot" id="slot1">1</div>
+                <div class="slot" id="slot2">2</div>
+                <div class="slot" id="slot3">3</div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="game.js"></script>
+
+</body>
+
+</html>
