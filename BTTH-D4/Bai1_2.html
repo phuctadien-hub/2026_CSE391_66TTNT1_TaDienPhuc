@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Bảng Điểm Sinh Viên</title>
+</head>
+
+<body>
+
+    <h2>Bảng Điểm Sinh Viên</h2>
+
+    <!-- Thêm sinh viên -->
+    <label>Họ tên: <input type="text" id="hoTen" /></label>
+    <label>Điểm: <input type="number" id="diem" min="0" max="10" step="0.1" /></label>
+    <button onclick="them()">Thêm</button>
+
+    <hr>
+
+    <!-- Tìm kiếm & lọc -->
+    <label>Tìm kiếm: <input type="text" id="tuKhoa" placeholder="Nhập tên..." /></label>
+    <label>Xếp loại:
+        <select id="locXepLoai">
+            <option value="">Tất cả</option>
+            <option value="Giỏi">Giỏi</option>
+            <option value="Khá">Khá</option>
+            <option value="Trung bình">Trung bình</option>
+            <option value="Yếu">Yếu</option>
+        </select>
+    </label>
+
+    <table border="1" cellpadding="6" cellspacing="0">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Họ tên</th>
+                <th id="thDiem" style="cursor:pointer">Điểm</th>
+                <th>Xếp loại</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+    </table>
+
+    <p id="thongKe"></p>
+
+    <script>
+        const students = [
+            { hoTen: "Nguyễn Văn An", diem: 9.0 },
+            { hoTen: "Trần Thị Bình", diem: 7.5 },
+            { hoTen: "Lê Minh Châu", diem: 4.2 },
+            { hoTen: "Phạm Nguyễn Duy", diem: 6.0 },
+            { hoTen: "Hoàng Thị Em", diem: 8.5 },
+        ];
+
+        let sortDir = null; // null | "asc" | "desc"
+
+        function xepLoai(d) {
+            if (d >= 8.5) return "Giỏi";
+            if (d >= 7.0) return "Khá";
+            if (d >= 5.0) return "Trung bình";
+            return "Yếu";
+        }
+
+        function applyFilters() {
+            const tuKhoa = document.getElementById("tuKhoa").value.trim().toLowerCase();
+            const locXL = document.getElementById("locXepLoai").value;
+
+            let filtered = students.filter((sv) => {
+                const khopTen = sv.hoTen.toLowerCase().includes(tuKhoa);
+                const khopXL = locXL === "" || xepLoai(sv.diem) === locXL;
+                return khopTen && khopXL;
+            });
+
+            if (sortDir === "asc") filtered.sort((a, b) => a.diem - b.diem);
+            if (sortDir === "desc") filtered.sort((a, b) => b.diem - a.diem);
+
+            renderTable(filtered);
+        }
+
+        function renderTable(filtered) {
+            const tbody = document.getElementById("tbody");
+            tbody.innerHTML = "";
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5">Không có kết quả</td></tr>';
+            } else {
+                filtered.forEach((sv, i) => {
+                    const tr = document.createElement("tr");
+                    if (sv.diem < 5) tr.style.backgroundColor = "yellow";
+
+                    // Tìm index gốc trong mảng students để xóa đúng
+                    const indexGoc = students.indexOf(sv);
+                    tr.innerHTML = `
+            <td>${i + 1}</td>
+            <td>${sv.hoTen}</td>
+            <td>${sv.diem}</td>
+            <td>${xepLoai(sv.diem)}</td>
+            <td><button data-index="${indexGoc}">Xóa</button></td>
+          `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            const tong = students.length;
+            const tb = tong > 0
+                ? (students.reduce((s, sv) => s + sv.diem, 0) / tong).toFixed(2)
+                : 0;
+            document.getElementById("thongKe").textContent =
+                `Hiển thị: ${filtered.length} / Tổng: ${tong} sinh viên | Điểm trung bình: ${tb}`;
+        }
+
+        function them() {
+            const hoTen = document.getElementById("hoTen").value.trim();
+            const diemStr = document.getElementById("diem").value;
+            const diem = parseFloat(diemStr);
+
+            if (!hoTen) { alert("Họ tên không được để trống!"); return; }
+            if (diemStr === "" || isNaN(diem) || diem < 0 || diem > 10) {
+                alert("Điểm phải là số từ 0 đến 10!"); return;
+            }
+
+            students.push({ hoTen, diem });
+            applyFilters();
+
+            document.getElementById("hoTen").value = "";
+            document.getElementById("diem").value = "";
+            document.getElementById("hoTen").focus();
+        }
+
+        // Xóa qua Event Delegation
+        document.getElementById("tbody").addEventListener("click", function (e) {
+            if (e.target.tagName === "BUTTON") {
+                const index = parseInt(e.target.getAttribute("data-index"));
+                students.splice(index, 1);
+                applyFilters();
+            }
+        });
+
+        // Sắp xếp khi click tiêu đề Điểm
+        document.getElementById("thDiem").addEventListener("click", function () {
+            if (sortDir !== "asc") {
+                sortDir = "asc";
+                this.textContent = "Điểm ▲";
+            } else {
+                sortDir = "desc";
+                this.textContent = "Điểm ▼";
+            }
+            applyFilters();
+        });
+
+        // Realtime tìm kiếm & lọc
+        document.getElementById("tuKhoa").addEventListener("input", applyFilters);
+        document.getElementById("locXepLoai").addEventListener("change", applyFilters);
+
+        // Enter ở ô Điểm để thêm
+        document.getElementById("diem").addEventListener("keydown", function (e) {
+            if (e.key === "Enter") them();
+        });
+
+        applyFilters();
+    </script>
+
+</body>
+
+</html>

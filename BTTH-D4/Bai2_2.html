@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Form Đặt Hàng</title>
+</head>
+
+<body>
+
+    <h2>Form Đặt Hàng Trực Tuyến</h2>
+
+    <form id="form">
+
+        <div>
+            <label>Tên sản phẩm:<br>
+                <select id="sanPham">
+                    <option value="">-- Chọn sản phẩm --</option>
+                    <option value="Áo thun">Áo thun</option>
+                    <option value="Quần jeans">Quần jeans</option>
+                    <option value="Giày sneaker">Giày sneaker</option>
+                    <option value="Mũ lưỡi trai">Mũ lưỡi trai</option>
+                    <option value="Túi xách">Túi xách</option>
+                </select>
+            </label>
+            <span id="err-sanPham" style="color:red"></span>
+        </div>
+
+        <div>
+            <label>Số lượng:<br>
+                <input type="number" id="soLuong" min="1" max="99" value="">
+            </label>
+            <span id="err-soLuong" style="color:red"></span>
+        </div>
+
+        <div>
+            <strong>Tổng tiền: <span id="tongTien">0 ₫</span></strong>
+        </div>
+
+        <div>
+            <label>Ngày giao hàng:<br>
+                <input type="date" id="ngayGiao">
+            </label>
+            <span id="err-ngayGiao" style="color:red"></span>
+        </div>
+
+        <div>
+            <label>Địa chỉ giao:<br>
+                <input type="text" id="diaChi">
+            </label>
+            <span id="err-diaChi" style="color:red"></span>
+        </div>
+
+        <div>
+            <label>Ghi chú (không bắt buộc):<br>
+                <textarea id="ghiChu" rows="3" cols="40" maxlength="200"></textarea>
+            </label><br>
+            <span id="demKyTu">0/200</span>
+            <span id="err-ghiChu" style="color:red"></span>
+        </div>
+
+        <div>
+            Phương thức thanh toán:
+            <label><input type="radio" name="thanhToan" value="COD"> COD</label>
+            <label><input type="radio" name="thanhToan" value="Chuyển khoản"> Chuyển khoản</label>
+            <label><input type="radio" name="thanhToan" value="Ví điện tử"> Ví điện tử</label>
+            <span id="err-thanhToan" style="color:red"></span>
+        </div>
+
+        <br>
+        <button type="submit">Đặt hàng</button>
+
+    </form>
+
+    <!-- Div xác nhận -->
+    <div id="xacNhanDiv" style="display:none; border:1px solid #333; padding:12px; margin-top:12px;">
+        <h3>Xác nhận đơn hàng</h3>
+        <p id="tomTat"></p>
+        <button onclick="xacNhan()">Xác nhận</button>
+        <button onclick="huy()">Hủy</button>
+    </div>
+
+    <!-- Thành công -->
+    <div id="thanhCong" style="display:none;">
+        <h3>Đặt hàng thành công! 🎉</h3>
+        <p id="thanhCongInfo"></p>
+    </div>
+
+    <script>
+        const prices = {
+            "Áo thun": 150000,
+            "Quần jeans": 200000,
+            "Giày sneaker": 350000,
+            "Mũ lưỡi trai": 80000,
+            "Túi xách": 250000,
+        };
+
+        // --- Tiện ích ---
+        function showError(id, msg) { document.getElementById("err-" + id).textContent = msg; }
+        function clearError(id) { document.getElementById("err-" + id).textContent = ""; }
+
+        function formatTien(so) {
+            return Number(so).toLocaleString("vi-VN") + " ₫";
+        }
+
+        // --- Tính tổng tiền ---
+        function tinhTongTien() {
+            const sp = document.getElementById("sanPham").value;
+            const sl = parseInt(document.getElementById("soLuong").value);
+            if (sp && prices[sp] && sl >= 1) {
+                document.getElementById("tongTien").textContent = formatTien(prices[sp] * sl);
+            } else {
+                document.getElementById("tongTien").textContent = "0 ₫";
+            }
+        }
+
+        document.getElementById("sanPham").addEventListener("change", tinhTongTien);
+        document.getElementById("soLuong").addEventListener("input", tinhTongTien);
+
+        // --- Đếm ký tự ghi chú ---
+        document.getElementById("ghiChu").addEventListener("input", function () {
+            const len = this.value.length;
+            const dem = document.getElementById("demKyTu");
+            dem.textContent = len + "/200";
+            dem.style.color = len > 200 ? "red" : "black";
+            if (len <= 200) clearError("ghiChu");
+        });
+
+        // --- Validate từng trường ---
+        function validateSanPham() {
+            if (!document.getElementById("sanPham").value) {
+                showError("sanPham", "Vui lòng chọn sản phẩm."); return false;
+            }
+            clearError("sanPham"); return true;
+        }
+
+        function validateSoLuong() {
+            const val = document.getElementById("soLuong").value;
+            const sl = parseInt(val);
+            if (val === "" || isNaN(sl)) {
+                showError("soLuong", "Vui lòng nhập số lượng."); return false;
+            }
+            if (sl < 1 || sl > 99 || !Number.isInteger(sl)) {
+                showError("soLuong", "Số lượng phải là số nguyên từ 1 đến 99."); return false;
+            }
+            clearError("soLuong"); return true;
+        }
+
+        function validateNgayGiao() {
+            const val = document.getElementById("ngayGiao").value;
+            if (!val) {
+                showError("ngayGiao", "Vui lòng chọn ngày giao hàng."); return false;
+            }
+            const ngay = new Date(val);
+            const homNay = new Date();
+            homNay.setHours(0, 0, 0, 0);
+            const max = new Date(homNay);
+            max.setDate(max.getDate() + 30);
+
+            if (ngay < homNay) {
+                showError("ngayGiao", "Ngày giao không được là ngày trong quá khứ."); return false;
+            }
+            if (ngay > max) {
+                showError("ngayGiao", "Ngày giao không quá 30 ngày kể từ hôm nay."); return false;
+            }
+            clearError("ngayGiao"); return true;
+        }
+
+        function validateDiaChi() {
+            const val = document.getElementById("diaChi").value.trim();
+            if (!val) {
+                showError("diaChi", "Địa chỉ không được để trống."); return false;
+            }
+            if (val.length < 10) {
+                showError("diaChi", "Địa chỉ phải có ít nhất 10 ký tự."); return false;
+            }
+            clearError("diaChi"); return true;
+        }
+
+        function validateGhiChu() {
+            const val = document.getElementById("ghiChu").value;
+            if (val.length > 200) {
+                showError("ghiChu", "Ghi chú không được vượt quá 200 ký tự."); return false;
+            }
+            clearError("ghiChu"); return true;
+        }
+
+        function validateThanhToan() {
+            if (!document.querySelector('input[name="thanhToan"]:checked')) {
+                showError("thanhToan", "Vui lòng chọn phương thức thanh toán."); return false;
+            }
+            clearError("thanhToan"); return true;
+        }
+
+        // --- Blur ---
+        document.getElementById("sanPham").addEventListener("blur", validateSanPham);
+        document.getElementById("soLuong").addEventListener("blur", validateSoLuong);
+        document.getElementById("ngayGiao").addEventListener("blur", validateNgayGiao);
+        document.getElementById("diaChi").addEventListener("blur", validateDiaChi);
+        document.getElementById("ghiChu").addEventListener("blur", validateGhiChu);
+
+        // --- Xóa lỗi khi nhập lại ---
+        ["soLuong", "diaChi"].forEach(function (id) {
+            document.getElementById(id).addEventListener("input", function () { clearError(id); });
+        });
+        document.getElementById("sanPham").addEventListener("change", function () { clearError("sanPham"); });
+        document.getElementById("ngayGiao").addEventListener("change", function () { clearError("ngayGiao"); });
+
+        // --- Submit ---
+        document.getElementById("form").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const hopLe =
+                validateSanPham() &
+                validateSoLuong() &
+                validateNgayGiao() &
+                validateDiaChi() &
+                validateGhiChu() &
+                validateThanhToan();
+
+            if (hopLe) {
+                const sp = document.getElementById("sanPham").value;
+                const sl = parseInt(document.getElementById("soLuong").value);
+                const ng = document.getElementById("ngayGiao").value;
+                const tt = document.querySelector('input[name="thanhToan"]:checked').value;
+                const tong = formatTien(prices[sp] * sl);
+
+                document.getElementById("tomTat").innerHTML =
+                    `<b>Sản phẩm:</b> ${sp}<br>
+           <b>Số lượng:</b> ${sl}<br>
+           <b>Tổng tiền:</b> ${tong}<br>
+           <b>Ngày giao:</b> ${ng}<br>
+           <b>Thanh toán:</b> ${tt}`;
+
+                document.getElementById("xacNhanDiv").style.display = "block";
+            }
+        });
+
+        function xacNhan() {
+            const sp = document.getElementById("sanPham").value;
+            const sl = parseInt(document.getElementById("soLuong").value);
+            const tong = formatTien(prices[sp] * sl);
+
+            document.getElementById("form").style.display = "none";
+            document.getElementById("xacNhanDiv").style.display = "none";
+            document.getElementById("thanhCongInfo").innerHTML =
+                `Bạn đã đặt <b>${sl} ${sp}</b> — Tổng: <b>${tong}</b>`;
+            document.getElementById("thanhCong").style.display = "block";
+        }
+
+        function huy() {
+            document.getElementById("xacNhanDiv").style.display = "none";
+        }
+    </script>
+
+</body>
+
+</html>

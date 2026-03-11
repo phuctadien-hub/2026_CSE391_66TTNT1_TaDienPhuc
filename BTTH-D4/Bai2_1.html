@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng Ký Tài Khoản</title>
+</head>
+
+<body>
+
+    <h2>Đăng Ký Tài Khoản</h2>
+
+    <form id="form">
+
+        <div>
+            <label>Họ và tên:<br>
+                <input type="text" id="hoTen">
+            </label>
+            <span id="err-hoTen" style="color:red"></span>
+        </div>
+
+        <div>
+            <label>Email:<br>
+                <input type="text" id="email">
+            </label>
+            <span id="err-email" style="color:red"></span>
+        </div>
+
+        <div>
+            <label>Số điện thoại:<br>
+                <input type="text" id="sdt">
+            </label>
+            <span id="err-sdt" style="color:red"></span>
+        </div>
+
+        <div>
+            <label>Mật khẩu:<br>
+                <input type="password" id="matKhau">
+            </label>
+            <span id="err-matKhau" style="color:red"></span>
+        </div>
+
+        <div>
+            <label>Xác nhận mật khẩu:<br>
+                <input type="password" id="xacNhan">
+            </label>
+            <span id="err-xacNhan" style="color:red"></span>
+        </div>
+
+        <div>
+            Giới tính:
+            <label><input type="radio" name="gioiTinh" value="Nam"> Nam</label>
+            <label><input type="radio" name="gioiTinh" value="Nữ"> Nữ</label>
+            <label><input type="radio" name="gioiTinh" value="Khác"> Khác</label>
+            <span id="err-gioiTinh" style="color:red"></span>
+        </div>
+
+        <div>
+            <label>
+                <input type="checkbox" id="dieuKhoan">
+                Tôi đồng ý với điều khoản sử dụng
+            </label>
+            <span id="err-dieuKhoan" style="color:red"></span>
+        </div>
+
+        <br>
+        <button type="submit">Đăng ký</button>
+
+    </form>
+
+    <div id="thanhCong" style="display:none">
+        <h3>Đăng ký thành công! 🎉</h3>
+        <p>Chào mừng, <strong id="tenHienThi"></strong>!</p>
+    </div>
+
+    <script>
+        // --- Tiện ích ---
+        function showError(fieldId, message) {
+            document.getElementById("err-" + fieldId).textContent = message;
+        }
+        function clearError(fieldId) {
+            document.getElementById("err-" + fieldId).textContent = "";
+        }
+
+        // --- Các hàm validate ---
+        function validateHoTen() {
+            const val = document.getElementById("hoTen").value.trim();
+            if (!val) {
+                showError("hoTen", "Họ tên không được để trống."); return false;
+            }
+            if (val.length < 3) {
+                showError("hoTen", "Họ tên phải có ít nhất 3 ký tự."); return false;
+            }
+            if (!/^[a-zA-ZÀ-ỹ\s]+$/.test(val)) {
+                showError("hoTen", "Họ tên chỉ được chứa chữ cái và khoảng trắng."); return false;
+            }
+            clearError("hoTen"); return true;
+        }
+
+        function validateEmail() {
+            const val = document.getElementById("email").value.trim();
+            if (!val) {
+                showError("email", "Email không được để trống."); return false;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+                showError("email", "Email không đúng định dạng."); return false;
+            }
+            clearError("email"); return true;
+        }
+
+        function validateSdt() {
+            const val = document.getElementById("sdt").value.trim();
+            if (!val) {
+                showError("sdt", "Số điện thoại không được để trống."); return false;
+            }
+            if (!/^0\d{9}$/.test(val)) {
+                showError("sdt", "Số điện thoại phải có 10 chữ số và bắt đầu bằng 0."); return false;
+            }
+            clearError("sdt"); return true;
+        }
+
+        function validateMatKhau() {
+            const val = document.getElementById("matKhau").value;
+            if (!val) {
+                showError("matKhau", "Mật khẩu không được để trống."); return false;
+            }
+            if (val.length < 8) {
+                showError("matKhau", "Mật khẩu phải có ít nhất 8 ký tự."); return false;
+            }
+            if (!/[A-Z]/.test(val)) {
+                showError("matKhau", "Mật khẩu phải có ít nhất 1 chữ hoa."); return false;
+            }
+            if (!/[a-z]/.test(val)) {
+                showError("matKhau", "Mật khẩu phải có ít nhất 1 chữ thường."); return false;
+            }
+            if (!/[0-9]/.test(val)) {
+                showError("matKhau", "Mật khẩu phải có ít nhất 1 chữ số."); return false;
+            }
+            clearError("matKhau"); return true;
+        }
+
+        function validateXacNhan() {
+            const mk = document.getElementById("matKhau").value;
+            const xn = document.getElementById("xacNhan").value;
+            if (!xn) {
+                showError("xacNhan", "Vui lòng xác nhận mật khẩu."); return false;
+            }
+            if (xn !== mk) {
+                showError("xacNhan", "Xác nhận mật khẩu không khớp."); return false;
+            }
+            clearError("xacNhan"); return true;
+        }
+
+        function validateGioiTinh() {
+            const chon = document.querySelector('input[name="gioiTinh"]:checked');
+            if (!chon) {
+                showError("gioiTinh", "Vui lòng chọn giới tính."); return false;
+            }
+            clearError("gioiTinh"); return true;
+        }
+
+        function validateDieuKhoan() {
+            if (!document.getElementById("dieuKhoan").checked) {
+                showError("dieuKhoan", "Bạn phải đồng ý với điều khoản."); return false;
+            }
+            clearError("dieuKhoan"); return true;
+        }
+
+        // --- Blur: validate từng trường khi rời ô ---
+        document.getElementById("hoTen").addEventListener("blur", validateHoTen);
+        document.getElementById("email").addEventListener("blur", validateEmail);
+        document.getElementById("sdt").addEventListener("blur", validateSdt);
+        document.getElementById("matKhau").addEventListener("blur", validateMatKhau);
+        document.getElementById("xacNhan").addEventListener("blur", validateXacNhan);
+
+        // --- Input: xóa lỗi khi bắt đầu gõ lại ---
+        ["hoTen", "email", "sdt", "matKhau", "xacNhan"].forEach(function (id) {
+            document.getElementById(id).addEventListener("input", function () {
+                clearError(id);
+            });
+        });
+
+        // --- Submit ---
+        document.getElementById("form").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            // Dùng & để đảm bảo tất cả hàm đều được gọi, không short-circuit
+            const hopLe =
+                validateHoTen() &
+                validateEmail() &
+                validateSdt() &
+                validateMatKhau() &
+                validateXacNhan() &
+                validateGioiTinh() &
+                validateDieuKhoan();
+
+            if (hopLe) {
+                const ten = document.getElementById("hoTen").value.trim();
+                document.getElementById("form").style.display = "none";
+                document.getElementById("tenHienThi").textContent = ten;
+                document.getElementById("thanhCong").style.display = "block";
+            }
+        });
+    </script>
+
+</body>
+
+</html>

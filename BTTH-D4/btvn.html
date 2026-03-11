@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng Ký Nhiều Bước</title>
+</head>
+
+<body>
+
+    <h2>Form Đăng Ký</h2>
+
+    <!-- Thanh tiến trình -->
+    <div>
+        Bước <span id="buocHienTai">1</span> / 3
+        <progress id="progressBar" value="1" max="3"></progress>
+    </div>
+
+    <hr>
+
+    <!-- BƯỚC 1 -->
+    <div id="buoc1">
+        <h3>Bước 1 – Thông tin cá nhân</h3>
+
+        <div>
+            <label>Họ và tên (tối đa 50 ký tự):<br>
+                <input type="text" id="hoTen" maxlength="50">
+                <span id="demHoTen">0/50</span>
+            </label>
+            <span id="err-hoTen" style="color:red"></span>
+        </div>
+
+        <div>
+            <label>Ngày sinh:<br>
+                <input type="date" id="ngaySinh">
+            </label>
+            <span id="err-ngaySinh" style="color:red"></span>
+        </div>
+
+        <div>
+            Giới tính:
+            <label><input type="radio" name="gioiTinh" value="Nam"> Nam</label>
+            <label><input type="radio" name="gioiTinh" value="Nữ"> Nữ</label>
+            <label><input type="radio" name="gioiTinh" value="Khác"> Khác</label>
+            <span id="err-gioiTinh" style="color:red"></span>
+        </div>
+
+        <br>
+        <button onclick="buoc1TiepTheo()">Tiếp theo →</button>
+    </div>
+
+    <!-- BƯỚC 2 -->
+    <div id="buoc2" style="display:none">
+        <h3>Bước 2 – Thông tin tài khoản</h3>
+
+        <div>
+            <label>Email:<br>
+                <input type="text" id="email">
+            </label>
+            <span id="err-email" style="color:red"></span>
+        </div>
+
+        <div>
+            <label>Mật khẩu:<br>
+                <input type="password" id="matKhau">
+                <button type="button" onclick="toggleMatKhau()">👁</button>
+            </label><br>
+            <div id="strengthBar" style="height:8px; width:200px; background:#ddd;">
+                <div id="strengthFill" style="height:100%; width:0%; transition:width 0.3s;"></div>
+            </div>
+            <span id="strengthLabel"></span>
+            <span id="err-matKhau" style="color:red"></span>
+        </div>
+
+        <div>
+            <label>Xác nhận mật khẩu:<br>
+                <input type="password" id="xacNhan">
+            </label>
+            <span id="err-xacNhan" style="color:red"></span>
+        </div>
+
+        <br>
+        <button onclick="quayLai(1)">← Quay lại</button>
+        <button onclick="buoc2TiepTheo()">Tiếp theo →</button>
+    </div>
+
+    <!-- BƯỚC 3 -->
+    <div id="buoc3" style="display:none">
+        <h3>Bước 3 – Xác nhận thông tin</h3>
+        <div id="tomTat"></div>
+        <br>
+        <button onclick="quayLai(2)">← Quay lại</button>
+        <button onclick="hoanTat()">✔ Hoàn tất đăng ký</button>
+    </div>
+
+    <!-- Thành công -->
+    <div id="thanhCong" style="display:none">
+        <h3>Đăng ký thành công! 🎉</h3>
+        <p>Chào mừng, <strong id="tenHienThi"></strong>!</p>
+    </div>
+
+    <script>
+        // --- Tiện ích ---
+        function showError(id, msg) { document.getElementById("err-" + id).textContent = msg; }
+        function clearError(id) { document.getElementById("err-" + id).textContent = ""; }
+
+        function hienBuoc(so) {
+            document.getElementById("buoc1").style.display = "none";
+            document.getElementById("buoc2").style.display = "none";
+            document.getElementById("buoc3").style.display = "none";
+            document.getElementById("buoc" + so).style.display = "block";
+            document.getElementById("buocHienTai").textContent = so;
+            document.getElementById("progressBar").value = so;
+        }
+
+        function quayLai(buoc) { hienBuoc(buoc); }
+
+        // --- Đếm ký tự họ tên ---
+        document.getElementById("hoTen").addEventListener("input", function () {
+            const len = this.value.length;
+            document.getElementById("demHoTen").textContent = len + "/50";
+            clearError("hoTen");
+        });
+
+        // --- Toggle hiện/ẩn mật khẩu ---
+        function toggleMatKhau() {
+            const inp = document.getElementById("matKhau");
+            inp.type = inp.type === "password" ? "text" : "password";
+        }
+
+        // --- Thanh độ mạnh mật khẩu ---
+        document.getElementById("matKhau").addEventListener("input", function () {
+            clearError("matKhau");
+            const val = this.value;
+            let diem = 0;
+            if (val.length >= 8) diem++;
+            if (/[A-Z]/.test(val)) diem++;
+            if (/[a-z]/.test(val)) diem++;
+            if (/[0-9]/.test(val)) diem++;
+            if (/[^A-Za-z0-9]/.test(val)) diem++;
+
+            const fill = document.getElementById("strengthFill");
+            const label = document.getElementById("strengthLabel");
+
+            if (val.length === 0) {
+                fill.style.width = "0%"; fill.style.background = ""; label.textContent = "";
+            } else if (diem <= 2) {
+                fill.style.width = "33%"; fill.style.background = "red"; label.textContent = " Yếu";
+            } else if (diem <= 3) {
+                fill.style.width = "66%"; fill.style.background = "orange"; label.textContent = " Trung bình";
+            } else {
+                fill.style.width = "100%"; fill.style.background = "green"; label.textContent = " Mạnh";
+            }
+        });
+
+        // --- Validate bước 1 ---
+        function validateHoTen() {
+            const val = document.getElementById("hoTen").value.trim();
+            if (!val) { showError("hoTen", "Họ tên không được để trống."); return false; }
+            if (val.length < 3) { showError("hoTen", "Họ tên phải có ít nhất 3 ký tự."); return false; }
+            if (!/^[a-zA-ZÀ-ỹ\s]+$/.test(val)) { showError("hoTen", "Chỉ được chứa chữ cái và khoảng trắng."); return false; }
+            clearError("hoTen"); return true;
+        }
+
+        function validateNgaySinh() {
+            const val = document.getElementById("ngaySinh").value;
+            if (!val) { showError("ngaySinh", "Vui lòng chọn ngày sinh."); return false; }
+            const ngay = new Date(val);
+            const homNay = new Date();
+            if (ngay >= homNay) { showError("ngaySinh", "Ngày sinh phải là ngày trong quá khứ."); return false; }
+            clearError("ngaySinh"); return true;
+        }
+
+        function validateGioiTinh() {
+            if (!document.querySelector('input[name="gioiTinh"]:checked')) {
+                showError("gioiTinh", "Vui lòng chọn giới tính."); return false;
+            }
+            clearError("gioiTinh"); return true;
+        }
+
+        // --- Validate bước 2 ---
+        function validateEmail() {
+            const val = document.getElementById("email").value.trim();
+            if (!val) { showError("email", "Email không được để trống."); return false; }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) { showError("email", "Email không đúng định dạng."); return false; }
+            clearError("email"); return true;
+        }
+
+        function validateMatKhau() {
+            const val = document.getElementById("matKhau").value;
+            if (!val) { showError("matKhau", "Mật khẩu không được để trống."); return false; }
+            if (val.length < 8) { showError("matKhau", "Mật khẩu phải có ít nhất 8 ký tự."); return false; }
+            if (!/[A-Z]/.test(val)) { showError("matKhau", "Cần ít nhất 1 chữ hoa."); return false; }
+            if (!/[a-z]/.test(val)) { showError("matKhau", "Cần ít nhất 1 chữ thường."); return false; }
+            if (!/[0-9]/.test(val)) { showError("matKhau", "Cần ít nhất 1 chữ số."); return false; }
+            clearError("matKhau"); return true;
+        }
+
+        function validateXacNhan() {
+            const mk = document.getElementById("matKhau").value;
+            const xn = document.getElementById("xacNhan").value;
+            if (!xn) { showError("xacNhan", "Vui lòng xác nhận mật khẩu."); return false; }
+            if (xn !== mk) { showError("xacNhan", "Mật khẩu không khớp."); return false; }
+            clearError("xacNhan"); return true;
+        }
+
+        // --- Blur bước 2 ---
+        document.getElementById("email").addEventListener("blur", validateEmail);
+        document.getElementById("matKhau").addEventListener("blur", validateMatKhau);
+        document.getElementById("xacNhan").addEventListener("blur", validateXacNhan);
+        document.getElementById("xacNhan").addEventListener("input", function () { clearError("xacNhan"); });
+        document.getElementById("email").addEventListener("input", function () { clearError("email"); });
+
+        // --- Điều hướng bước ---
+        function buoc1TiepTheo() {
+            const hopLe = validateHoTen() & validateNgaySinh() & validateGioiTinh();
+            if (hopLe) hienBuoc(2);
+        }
+
+        function buoc2TiepTheo() {
+            const hopLe = validateEmail() & validateMatKhau() & validateXacNhan();
+            if (!hopLe) return;
+
+            // Điền tóm tắt bước 3
+            const gt = document.querySelector('input[name="gioiTinh"]:checked').value;
+            document.getElementById("tomTat").innerHTML = `
+      <table border="1" cellpadding="6">
+        <tr><th>Họ và tên</th><td>${document.getElementById("hoTen").value.trim()}</td></tr>
+        <tr><th>Ngày sinh</th><td>${document.getElementById("ngaySinh").value}</td></tr>
+        <tr><th>Giới tính</th><td>${gt}</td></tr>
+        <tr><th>Email</th><td>${document.getElementById("email").value.trim()}</td></tr>
+        <tr><th>Mật khẩu</th><td>••••••••</td></tr>
+      </table>
+    `;
+            hienBuoc(3);
+        }
+
+        function hoanTat() {
+            const ten = document.getElementById("hoTen").value.trim();
+            document.getElementById("buoc3").style.display = "none";
+            document.getElementById("progressBar").value = 3;
+            document.getElementById("tenHienThi").textContent = ten;
+            document.getElementById("thanhCong").style.display = "block";
+        }
+    </script>
+
+</body>
+
+</html>
