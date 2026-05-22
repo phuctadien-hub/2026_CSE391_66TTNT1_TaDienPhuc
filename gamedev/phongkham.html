@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhòngKhám Pro — Hệ Thống Quản Lý</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #1c2333;
+      --border: rgba(255, 255, 255, 0.07);
+      --text: #e6edf3;
+      --muted: #7d8590;
+      --accent: #58a6ff;
+
+      --c1: #3b82f6;
+      --c1b: #1e3a5f;
+      --c2: #10b981;
+      --c2b: #0a3728;
+      --c3: #f59e0b;
+      --c3b: #3d2c0a;
+      --c4: #ef4444;
+      --c4b: #3d0f0f;
+      --c5: #a855f7;
+      --c5b: #2e1550;
+      --c6: #06b6d4;
+      --c6b: #0a2f38;
+      --c7: #ec4899;
+      --c7b: #3d0f28;
+      --c8: #0ea5e9;
+      --c8b: #0a2a3d;
+      --c9: #14b8a6;
+      --c9b: #0a2e2b;
+      --c10: #f97316;
+      --c10b: #3d1f0a;
+      --c11: #8b5cf6;
+      --c11b: #231050;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 260px;
+      min-height: 100vh;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+
+    .logo {
+      padding: 28px 20px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--text);
+      letter-spacing: 0.3px;
+    }
+
+    .logo-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 3px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .logo-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      margin-right: 8px;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: 0.4
+      }
+    }
+
+    .nav {
+      padding: 12px 0;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .nav::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .nav::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 2px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .nav-item.active {
+      background: rgba(255, 255, 255, 0.06);
+      border-left-color: var(--item-color);
+    }
+
+    .nav-num {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      width: 18px;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--item-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+
+    .nav-item:hover .nav-icon {
+      transform: scale(1.1);
+    }
+
+    .nav-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      flex: 1;
+    }
+
+    .nav-item.active .nav-label {
+      color: var(--item-color);
+    }
+
+    .nav-role {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 20px;
+      background: var(--item-bg);
+      color: var(--item-color);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .user-name {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .user-role-badge {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    /* ── MAIN ── */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .topbar {
+      height: 60px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 28px;
+      gap: 16px;
+    }
+
+    .topbar-title {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .topbar-breadcrumb {
+      font-size: 12px;
+      color: var(--muted);
+      margin-left: 4px;
+    }
+
+    .topbar-spacer {
+      flex: 1;
+    }
+
+    .search-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 14px;
+      color: var(--text);
+      font-size: 13px;
+      font-family: inherit;
+      width: 220px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-box:focus {
+      border-color: var(--accent);
+    }
+
+    .search-box::placeholder {
+      color: var(--muted);
+    }
+
+    .notif-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      position: relative;
+    }
+
+    .notif-dot {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 7px;
+      height: 7px;
+      background: #ef4444;
+      border-radius: 50%;
+      border: 1.5px solid var(--surface);
+    }
+
+    .content {
+      flex: 1;
+      padding: 28px;
+      overflow-y: auto;
+    }
+
+    .content::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .content::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+
+    /* ── TAB PANELS ── */
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+      animation: fadeIn 0.25s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .panel-icon-big {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: var(--panel-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      border: 1px solid var(--panel-border);
+    }
+
+    .panel-title {
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .panel-desc {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ── FORM ELEMENTS ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full {
+      grid-column: 1/-1;
+    }
+
+    label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+    }
+
+    input,
+    select,
+    textarea {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 12px;
+      color: var(--text);
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--accent);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    select option {
+      background: var(--surface2);
+    }
+
+    .btn {
+      padding: 9px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--panel-color, #3b82f6);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.85;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    /* ── TABLE ── */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .data-table th {
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .data-table td {
+      padding: 12px 14px;
+      font-size: 13px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .data-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .badge-green {
+      background: #0a3728;
+      color: #10b981;
+    }
+
+    .badge-blue {
+      background: #1e3a5f;
+      color: #3b82f6;
+    }
+
+    .badge-red {
+      background: #3d0f0f;
+      color: #ef4444;
+    }
+
+    .badge-yellow {
+      background: #3d2c0a;
+      color: #f59e0b;
+    }
+
+    /* ── STAT CARDS ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--scolor);
+    }
+
+    .stat-val {
+      font-size: 26px;
+      font-weight: 800;
+      margin: 6px 0 2px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .stat-change {
+      font-size: 11px;
+      color: #10b981;
+      margin-top: 4px;
+    }
+
+    /* ── CHART BAR ── */
+    .chart-wrap {
+      height: 140px;
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      padding: 0 4px;
+    }
+
+    .bar-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .bar {
+      width: 100%;
+      border-radius: 4px 4px 0 0;
+      background: linear-gradient(to top, #3b82f6, #06b6d4);
+      transition: height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      min-height: 4px;
+    }
+
+    .bar-label {
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    /* ── LOGIN ── */
+    .login-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 400px;
+    }
+
+    .login-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 36px;
+      width: 360px;
+      text-align: center;
+    }
+
+    .login-logo {
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
+
+    .login-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      margin-bottom: 4px;
+    }
+
+    .login-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-align: left;
+    }
+
+    .login-form input,
+    .login-form select {
+      padding: 11px 14px;
+      font-size: 14px;
+    }
+
+    .btn-login {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      color: white;
+      padding: 11px;
+      border-radius: 8px;
+      border: none;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      margin-top: 6px;
+      transition: opacity 0.2s;
+    }
+
+    .btn-login:hover {
+      opacity: 0.85;
+    }
+
+    /* ── INVOICE ── */
+    .invoice-preview {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      color: #1a1a1a;
+      max-width: 560px;
+    }
+
+    .inv-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .inv-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #1a3c5e;
+    }
+
+    .inv-num {
+      font-size: 12px;
+      color: #6b7a90;
+    }
+
+    .inv-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 13px;
+    }
+
+    .inv-total {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0 0;
+      font-weight: 800;
+      font-size: 16px;
+      color: #1a3c5e;
+    }
+
+    /* ── MEDICINE TABLE ── */
+    .med-search-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .med-search-row input {
+      flex: 1;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-title"><span class="logo-dot"></span>PhòngKhám Pro</div>
+      <div class="logo-sub">Hệ thống quản lý</div>
+    </div>
+
+    <nav class="nav" id="nav">
+      <!-- items injected by JS -->
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="avatar">NV</div>
+      <div>
+        <div class="user-name">Nguyễn Văn A</div>
+        <div class="user-role-badge">Nhân viên</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <span class="topbar-title" id="topbar-title">Đăng nhập</span>
+        <span class="topbar-breadcrumb" id="topbar-bc"></span>
+      </div>
+      <div class="topbar-spacer"></div>
+      <input class="search-box" placeholder="🔍  Tìm kiếm nhanh...">
+      <div class="notif-btn">🔔<span class="notif-dot"></span></div>
+    </div>
+
+    <div class="content" id="content">
+      <!-- panels injected by JS -->
+    </div>
+  </div>
+
+  <script>
+    const tabs = [
+      { id: 'login', num: '01', icon: '🔐', label: 'Đăng nhập & Phân quyền', role: 'Tất cả', c: 'var(--c1)', bg: 'var(--c1b)', border: 'rgba(59,130,246,0.2)' },
+      { id: 'addpat', num: '02', icon: '➕', label: 'Thêm Bệnh Nhân', role: 'NV', c: 'var(--c2)', bg: 'var(--c2b)', border: 'rgba(16,185,129,0.2)' },
+      { id: 'editpat', num: '03', icon: '✏️', label: 'Sửa Thông Tin', role: 'NV', c: 'var(--c3)', bg: 'var(--c3b)', border: 'rgba(245,158,11,0.2)' },
+      { id: 'delpat', num: '04', icon: '🗑️', label: 'Xóa Hồ Sơ', role: 'NV', c: 'var(--c4)', bg: 'var(--c4b)', border: 'rgba(239,68,68,0.2)' },
+      { id: 'search', num: '05', icon: '🔍', label: 'Tìm Bệnh Nhân', role: 'NV', c: 'var(--c5)', bg: 'var(--c5b)', border: 'rgba(168,85,247,0.2)' },
+      { id: 'appt', num: '06', icon: '📅', label: 'Đặt Lịch Khám', role: 'NV', c: 'var(--c6)', bg: 'var(--c6b)', border: 'rgba(6,182,212,0.2)' },
+      { id: 'presc', num: '07', icon: '💊', label: 'Kê Đơn Thuốc', role: 'BS', c: 'var(--c7)', bg: 'var(--c7b)', border: 'rgba(236,72,153,0.2)' },
+      { id: 'stats', num: '08', icon: '📊', label: 'Thống Kê Lượt Khám', role: 'NV', c: 'var(--c8)', bg: 'var(--c8b)', border: 'rgba(14,165,233,0.2)' },
+      { id: 'print', num: '09', icon: '🖨️', label: 'Xuất Phiếu Khám', role: 'NV', c: 'var(--c9)', bg: 'var(--c9b)', border: 'rgba(20,184,166,0.2)' },
+      { id: 'pay', num: '10', icon: '💳', label: 'Thanh Toán', role: 'NV', c: 'var(--c10)', bg: 'var(--c10b)', border: 'rgba(249,115,22,0.2)' },
+      { id: 'invoice', num: '11', icon: '🧾', label: 'Xuất Hóa Đơn', role: 'NV', c: 'var(--c11)', bg: 'var(--c11b)', border: 'rgba(139,92,246,0.2)' },
+    ];
+
+    // Build nav
+    const nav = document.getElementById('nav');
+    tabs.forEach((t, i) => {
+      const el = document.createElement('div');
+      el.className = 'nav-item' + (i === 0 ? ' active' : '');
+      el.style.setProperty('--item-color', t.c);
+      el.style.setProperty('--item-bg', t.bg);
+      el.dataset.id = t.id;
+      el.innerHTML = `<span class="nav-num">${t.num}</span>
+    <div class="nav-icon">${t.icon}</div>
+    <span class="nav-label">${t.label}</span>
+    <span class="nav-role">${t.role}</span>`;
+      el.onclick = () => activate(t.id, t.label, el);
+      nav.appendChild(el);
+    });
+
+    function activate(id, label, el) {
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      el.classList.add('active');
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('p-' + id).classList.add('active');
+      document.getElementById('topbar-title').textContent = label;
+    }
+
+    // Build panels
+    const content = document.getElementById('content');
+
+    const panels = {
+
+      login: `
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="login-logo">🏥</div>
+    <div class="login-title">PhòngKhám Pro</div>
+    <div class="login-sub">Vui lòng đăng nhập để tiếp tục</div>
+    <div class="login-form">
+      <div class="form-group">
+        <label>TÊN ĐĂNG NHẬP</label>
+        <input type="text" placeholder="Nhập tên đăng nhập..." value="nhanvien01">
+      </div>
+      <div class="form-group">
+        <label>MẬT KHẨU</label>
+        <input type="password" placeholder="••••••••" value="12345678">
+      </div>
+      <div class="form-group">
+        <label>VAI TRÒ</label>
+        <select>
+          <option>Nhân viên</option>
+          <option>Bác sĩ</option>
+          <option>Quản trị viên</option>
+        </select>
+      </div>
+      <button class="btn-login">Đăng nhập →</button>
+    </div>
+  </div>
+</div>`,
+
+      addpat: `
+<div class="card" style="--panel-color:var(--c2)">
+  <div class="card-title">Thông tin bệnh nhân mới</div>
+  <div class="form-grid">
+    <div class="form-group"><label>HỌ VÀ TÊN</label><input placeholder="Nguyễn Văn B" value="Trần Thị Mai"></div>
+    <div class="form-group"><label>NGÀY SINH</label><input type="date" value="1990-05-15"></div>
+    <div class="form-group"><label>GIỚI TÍNH</label><select><option>Nữ</option><option>Nam</option></select></div>
+    <div class="form-group"><label>SỐ ĐIỆN THOẠI</label><input placeholder="09xxxxxxxx" value="0901234567"></div>
+    <div class="form-group full"><label>ĐỊA CHỈ</label><input placeholder="Số nhà, đường, quận, thành phố" value="123 Trần Hưng Đạo, Q.1, TP.HCM"></div>
+    <div class="form-group full"><label>TIỀN SỬ BỆNH</label><textarea placeholder="Nhập tiền sử bệnh tật, dị ứng thuốc...">Dị ứng Penicillin. Tiểu đường type 2 (2018).</textarea></div>
+    <div class="form-group"><label>SỐ BẢO HIỂM Y TẾ</label><input placeholder="HC4010..." value="HC4010123456"></div>
+    <div class="form-group"><label>NHÓM MÁU</label><select><option>A+</option><option>B+</option><option>O+</option><option>AB+</option></select></div>
+  </div>
+  <div class="btn-row" style="margin-top:16px">
+    <button class="btn btn-primary" style="background:var(--c2)">✓ Lưu Hồ Sơ</button>
+    <button class="btn btn-secondary">✕ Hủy</button>
+  </div>
+</div>`,
+
+      editpat: `
+<div class="card">
+  <div class="card-title">Danh sách bệnh nhân</div>
+  <div style="display:flex;gap:10px;margin-bottom:14px">
+    <input placeholder="🔍  Tìm theo tên, mã BN..." style="flex:1" value="">
+    <button class="btn btn-secondary">Tìm</button>
+  </div>
+  <table class="data-table">
+    <thead><tr>
+      <th>Mã BN</th><th>Họ Tên</th><th>SĐT</th><th>Ngày sinh</th><th>Thao tác</th>
+    </tr></thead>
+    <tbody>
+      <tr><td>BN-0041</td><td>Nguyễn Thị Lan</td><td>0901111222</td><td>15/03/1985</td><td><button class="btn btn-secondary" style="padding:5px 12px;font-size:12px">✏️ Sửa</button></td></tr>
+      <tr><td>BN-0042</td><td>Trần Văn Hùng</td><td>0912333444</td><td>22/07/1990</td><td><button class="btn btn-secondary" style="padding:5px 12px;font-size:12px">✏️ Sửa</button></td></tr>
+      <tr><td>BN-0043</td><td>Lê Thị Hoa</td><td>0933555666</td><td>08/11/1978</td><td><button class="btn btn-secondary" style="padding:5px 12px;font-size:12px">✏️ Sửa</button></td></tr>
+    </tbody>
+  </table>
+</div>`,
+
+      delpat: `
+<div class="card">
+  <div class="card-title">Bệnh nhân chưa có lịch khám</div>
+  <table class="data-table">
+    <thead><tr><th><input type="checkbox"></th><th>Mã BN</th><th>Họ Tên</th><th>Ngày tạo</th><th>Trạng thái</th></tr></thead>
+    <tbody>
+      <tr><td><input type="checkbox"></td><td>BN-0099</td><td>Phạm Văn Cường</td><td>10/05/2025</td><td><span class="badge badge-yellow">Chưa có lịch</span></td></tr>
+      <tr><td><input type="checkbox" checked></td><td>BN-0101</td><td>Đặng Thị Nga</td><td>12/05/2025</td><td><span class="badge badge-yellow">Chưa có lịch</span></td></tr>
+      <tr><td><input type="checkbox"></td><td>BN-0103</td><td>Vũ Minh Tuấn</td><td>14/05/2025</td><td><span class="badge badge-yellow">Chưa có lịch</span></td></tr>
+    </tbody>
+  </table>
+  <div class="btn-row" style="margin-top:16px">
+    <button class="btn" style="background:var(--c4);color:white">🗑️ Xóa mục đã chọn</button>
+    <button class="btn btn-secondary">Hủy</button>
+  </div>
+</div>`,
+
+      search: `
+<div class="card">
+  <div class="card-title">Tìm kiếm bệnh nhân</div>
+  <div style="display:flex;gap:10px;margin-bottom:18px;align-items:center">
+    <input placeholder="Tên, mã BN, số điện thoại..." style="flex:1;font-size:15px;padding:11px 14px" value="Trần">
+    <select><option>Tất cả</option><option>Theo tên</option><option>Theo mã</option><option>Theo SĐT</option></select>
+    <button class="btn" style="background:var(--c5);color:white">🔍 Tìm</button>
+  </div>
+  <table class="data-table">
+    <thead><tr><th>Mã BN</th><th>Họ Tên</th><th>SĐT</th><th>Ngày sinh</th><th>Lịch gần nhất</th><th></th></tr></thead>
+    <tbody>
+      <tr><td>BN-0012</td><td><b>Trần</b> Thị Mai</td><td>0901234567</td><td>15/05/1990</td><td><span class="badge badge-green">20/05/2025</span></td><td><button class="btn btn-secondary" style="padding:5px 12px;font-size:12px">Xem</button></td></tr>
+      <tr><td>BN-0042</td><td><b>Trần</b> Văn Hùng</td><td>0912333444</td><td>22/07/1988</td><td><span class="badge badge-blue">Đặt 25/05</span></td><td><button class="btn btn-secondary" style="padding:5px 12px;font-size:12px">Xem</button></td></tr>
+    </tbody>
+  </table>
+  <div style="font-size:12px;color:var(--muted);margin-top:10px">Tìm thấy <b style="color:var(--c5)">2</b> kết quả</div>
+</div>`,
+
+      appt: `
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+  <div class="card">
+    <div class="card-title">Thông tin lịch hẹn</div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="form-group"><label>BỆNH NHÂN</label><select><option>Trần Thị Mai (BN-0012)</option><option>Nguyễn Văn Hùng (BN-0042)</option></select></div>
+      <div class="form-group"><label>BÁC SĨ PHỤ TRÁCH</label><select><option>BS. Nguyễn Minh Khoa</option><option>BS. Lê Thị Hương</option></select></div>
+      <div class="form-group"><label>NGÀY KHÁM</label><input type="date" value="2025-05-25"></div>
+      <div class="form-group"><label>GIỜ KHÁM</label><select><option>08:00</option><option>09:00</option><option selected>10:00</option><option>11:00</option><option>14:00</option><option>15:00</option></select></div>
+      <div class="form-group"><label>PHÒNG KHÁM</label><select><option>Phòng 101</option><option>Phòng 102</option><option>Phòng 201</option></select></div>
+      <div class="form-group"><label>GHI CHÚ</label><textarea rows="2" placeholder="Lý do khám...">Tái khám tiểu đường định kỳ</textarea></div>
+      <button class="btn" style="background:var(--c6);color:white">📅 Đặt Lịch</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Lịch trong ngày — 25/05/2025</div>
+    ${[{ t: '08:00', bs: 'BS. Khoa', bn: 'Nguyễn Lan', st: 'green' }, { t: '09:00', bs: 'BS. Hương', bn: 'Lê Văn Bình', st: 'green' }, { t: '10:00', bs: 'BS. Khoa', bn: 'Trần Thị Mai', st: 'blue' }, { t: '11:00', bs: 'BS. Khoa', bn: '—', st: 'red' }, { t: '14:00', bs: 'BS. Hương', bn: 'Phạm Tuấn', st: 'green' }].map(r => `
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">
+      <div style="font-weight:700;font-size:13px;width:44px;color:var(--c6)">${r.t}</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:600">${r.bn}</div>
+        <div style="font-size:11px;color:var(--muted)">${r.bs}</div>
+      </div>
+      <span class="badge badge-${r.st === 'blue' ? 'blue' : r.st === 'red' ? 'yellow' : 'green'}">${r.st === 'blue' ? 'Mới đặt' : r.st === 'red' ? 'Trống' : 'Đã xác nhận'}</span>
+    </div>`).join('')}
+  </div>
+</div>`,
+
+      presc: `
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+  <div class="card">
+    <div class="card-title">Chọn thuốc từ kho</div>
+    <div class="med-search-row">
+      <input placeholder="Tìm tên thuốc..." value="Para">
+      <button class="btn btn-secondary">Tìm</button>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>Tên thuốc</th><th>Đơn vị</th><th>Kho</th><th></th></tr></thead>
+      <tbody>
+        <tr><td>Paracetamol 500mg</td><td>Viên</td><td>980</td><td><button class="btn" style="background:var(--c7);color:white;padding:4px 10px;font-size:11px">+ Thêm</button></td></tr>
+        <tr><td>Panadol Extra</td><td>Viên</td><td>350</td><td><button class="btn" style="background:var(--c7);color:white;padding:4px 10px;font-size:11px">+ Thêm</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-title">Đơn thuốc — BN: Trần Thị Mai</div>
+    ${[{ n: 'Amoxicillin 500mg', l: '2 viên/lần, 3 lần/ngày', d: '7 ngày' }, { n: 'Paracetamol 500mg', l: '1 viên/lần khi đau', d: '5 ngày' }].map(m => `
+    <div style="background:var(--c7b);border:1px solid rgba(236,72,153,0.15);border-radius:8px;padding:12px;margin-bottom:8px">
+      <div style="font-weight:700;font-size:13px;color:var(--c7)">${m.n}</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px">💊 ${m.l} &nbsp;·&nbsp; ⏱ ${m.d}</div>
+    </div>`).join('')}
+    <div class="form-group" style="margin-top:12px"><label>LỜI DẶN BÁC SĨ</label><textarea rows="2">Uống sau ăn. Tái khám sau 1 tuần nếu không thuyên giảm.</textarea></div>
+    <button class="btn" style="background:var(--c7);color:white;margin-top:10px">💾 Lưu Đơn Thuốc</button>
+  </div>
+</div>`,
+
+      stats: `
+<div class="stats-row">
+  ${[{ v: '248', l: 'Lượt khám tháng này', c: '#3b82f6', ch: '↑ 12%' }, { v: '38', l: 'Hôm nay', c: '#10b981', ch: '↑ 5%' }, { v: '12', l: 'Bác sĩ hoạt động', c: '#f59e0b', ch: 'Ổn định' }, { v: '96%', l: 'Tỷ lệ hoàn thành', c: '#a855f7', ch: '↑ 2%' }].map(s => `
+  <div class="stat-card" style="--scolor:${s.c}">
+    <div class="stat-label">${s.l}</div>
+    <div class="stat-val" style="color:${s.c}">${s.v}</div>
+    <div class="stat-change">${s.ch}</div>
+  </div>`).join('')}
+</div>
+<div class="card">
+  <div class="card-title">Lượt khám theo ngày — Tháng 5/2025</div>
+  <div class="chart-wrap">
+    ${[28, 35, 22, 40, 38, 32, 45, 30, 42, 38, 50, 36, 28, 41, 38, 32, 45, 39, 28, 44, 38, 50, 36, 28, 41, 38, 32, 45, 39, 38].map((v, i) => `
+    <div class="bar-col">
+      <div class="bar" style="height:${v / 50 * 130}px"></div>
+      <div class="bar-label">${i + 1}</div>
+    </div>`).join('')}
+  </div>
+</div>`,
+
+      print: `
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+  <div class="card">
+    <div class="card-title">Chọn phiếu xuất</div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="form-group"><label>BỆNH NHÂN</label><select><option>Trần Thị Mai (BN-0012)</option></select></div>
+      <div class="form-group"><label>LỊCH KHÁM</label><select><option>20/05/2025 — BS. Nguyễn Khoa</option></select></div>
+      <div style="display:flex;gap:10px;margin-top:6px">
+        <button class="btn" style="background:var(--c9);color:white;flex:1">🖨️ In Phiếu</button>
+        <button class="btn" style="background:var(--c9);color:white;flex:1">📄 Xuất PDF</button>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Xem trước phiếu</div>
+    <div style="background:white;border-radius:10px;padding:20px;color:#1a1a1a;font-size:12px">
+      <div style="text-align:center;margin-bottom:12px">
+        <b style="font-size:14px;color:#1a3c5e">PHIẾU KHÁM BỆNH</b>
+        <div style="color:#6b7a90">PhòngKhám Pro — 456 Lê Lợi, Q.1</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
+        <div><b>BN:</b> Trần Thị Mai</div><div><b>Mã:</b> BN-0012</div>
+        <div><b>Ngày:</b> 20/05/2025</div><div><b>BS:</b> Nguyễn Khoa</div>
+      </div>
+      <div style="border-top:1px solid #eee;padding-top:10px"><b>Chẩn đoán:</b> Viêm họng cấp</div>
+      <div style="margin-top:8px"><b>Đơn thuốc:</b><br>1. Amoxicillin 500mg — 3 lần/ngày × 7 ngày<br>2. Paracetamol 500mg — khi đau × 5 ngày</div>
+      <div style="text-align:right;margin-top:14px;font-size:11px;color:#aaa">Chữ ký BS ___________</div>
+    </div>
+  </div>
+</div>`,
+
+      pay: `
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+  <div class="card">
+    <div class="card-title">Xác nhận thanh toán</div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="form-group"><label>BỆNH NHÂN</label><select><option>Trần Thị Mai (BN-0012)</option></select></div>
+      <div class="form-group"><label>HÌNH THỨC THANH TOÁN</label>
+        <select><option>Tiền mặt</option><option>Chuyển khoản</option><option>Bảo hiểm y tế</option></select>
+      </div>
+    </div>
+    <div style="margin-top:16px">
+      ${[{ label: 'Phí khám bệnh', val: '200.000đ' }, { label: 'Amoxicillin 500mg × 14 viên', val: '56.000đ' }, { label: 'Paracetamol 500mg × 10 viên', val: '25.000đ' }].map(r => `
+      <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px">
+        <span style="color:var(--muted)">${r.label}</span><span style="font-weight:600">${r.val}</span>
+      </div>`).join('')}
+      <div style="display:flex;justify-content:space-between;padding:14px 0;font-size:16px;font-weight:800">
+        <span>TỔNG CỘNG</span><span style="color:var(--c10)">281.000đ</span>
+      </div>
+    </div>
+    <button class="btn" style="background:var(--c10);color:white;width:100%">✓ Xác Nhận Thanh Toán</button>
+  </div>
+  <div class="card">
+    <div class="card-title">Lịch sử thanh toán hôm nay</div>
+    <table class="data-table">
+      <thead><tr><th>BN</th><th>Dịch vụ</th><th>Tổng</th><th>TT</th></tr></thead>
+      <tbody>
+        <tr><td>Nguyễn Lan</td><td>Khám + thuốc</td><td>185.000đ</td><td><span class="badge badge-green">Đã TT</span></td></tr>
+        <tr><td>Lê Bình</td><td>Khám</td><td>200.000đ</td><td><span class="badge badge-green">Đã TT</span></td></tr>
+        <tr><td>Trần Mai</td><td>Khám + thuốc</td><td>281.000đ</td><td><span class="badge badge-yellow">Chờ TT</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>`,
+
+      invoice: `
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+  <div class="card">
+    <div class="card-title">Tạo hóa đơn</div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="form-group"><label>BỆNH NHÂN</label><select><option>Trần Thị Mai (BN-0012)</option></select></div>
+      <div class="form-group"><label>NGÀY THANH TOÁN</label><input type="date" value="2025-05-20"></div>
+      <div style="display:flex;gap:10px;margin-top:6px">
+        <button class="btn" style="background:var(--c11);color:white;flex:1">🖨️ In Hóa Đơn</button>
+        <button class="btn" style="background:var(--c11);color:white;flex:1">📄 Xuất PDF</button>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="invoice-preview">
+      <div class="inv-header">
+        <div>
+          <div class="inv-title">HÓA ĐƠN DỊCH VỤ</div>
+          <div class="inv-num">Số: HD-20250520-0042</div>
+        </div>
+        <div style="text-align:right;font-size:12px;color:#6b7a90">
+          <div><b>PhòngKhám Pro</b></div>
+          <div>456 Lê Lợi, Q.1, TP.HCM</div>
+          <div>20/05/2025</div>
+        </div>
+      </div>
+      <div style="font-size:12px;background:#f8f9fa;border-radius:8px;padding:10px;margin-bottom:16px">
+        <b>Bệnh nhân:</b> Trần Thị Mai &nbsp;|&nbsp; <b>Mã:</b> BN-0012<br>
+        <b>BS phụ trách:</b> Nguyễn Minh Khoa &nbsp;|&nbsp; <b>Phòng:</b> 101
+      </div>
+      <div class="inv-row"><span>Phí khám bệnh</span><span>200.000đ</span></div>
+      <div class="inv-row"><span>Amoxicillin 500mg × 14</span><span>56.000đ</span></div>
+      <div class="inv-row"><span>Paracetamol 500mg × 10</span><span>25.000đ</span></div>
+      <div class="inv-total"><span>TỔNG CỘNG</span><span>281.000đ</span></div>
+      <div style="margin-top:14px;text-align:center;font-size:11px;color:#aaa">
+        Đã thanh toán — Chuyển khoản &nbsp;✓<br>Cảm ơn quý khách đã tin tưởng PhòngKhám Pro!
+      </div>
+    </div>
+  </div>
+</div>`
+    };
+
+    tabs.forEach(t => {
+      const div = document.createElement('div');
+      div.className = 'tab-panel' + (t.id === 'login' ? ' active' : '');
+      div.id = 'p-' + t.id;
+      div.style.setProperty('--panel-color', t.c);
+      div.style.setProperty('--panel-bg', t.bg);
+      div.style.setProperty('--panel-border', t.border);
+      div.innerHTML = `
+    <div class="panel-header">
+      <div class="panel-icon-big">${t.icon}</div>
+      <div>
+        <div class="panel-title">${t.label}</div>
+        <div class="panel-desc">Chức năng ${t.num} &nbsp;·&nbsp; Vai trò: ${t.role === 'BS' ? 'Bác sĩ' : t.role === 'NV' ? 'Nhân viên' : 'Tất cả'}</div>
+      </div>
+    </div>
+    ${panels[t.id]}`;
+      content.appendChild(div);
+    });
+  </script>
+</body>
+
+</html>
